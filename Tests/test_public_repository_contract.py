@@ -157,7 +157,7 @@ class PublicRepositoryContractTests(unittest.TestCase):
         for path in public_candidate_files():
             if not path.is_file() or path.suffix.lower() not in allowed_suffixes:
                 continue
-            if path == Path(__file__):
+            if path.relative_to(ROOT).as_posix() == "Tests/test_public_repository_contract.py":
                 continue
             text = path.read_text(encoding="utf-8", errors="ignore")
             for label, pattern in suspicious_patterns.items():
