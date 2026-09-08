@@ -155,6 +155,19 @@ an appropriate signing profile, Bluetooth permission, and real hardware.
 Passing CI is not evidence that a physical recorder or live Plaud account was
 tested.
 
+## Contributing
+
+Focused pull requests, bug reports, verified device-compatibility results, and
+documentation improvements are welcome. PinPoint is maintainer-led and offered
+on a best-effort basis without a support or delivery SLA. Read the
+[contribution guide](docs/CONTRIBUTING.md) before sharing code, logs, or hardware
+results; it explains the required tests and how to protect recordings,
+credentials, and device identifiers.
+
+- [Report a bug](https://github.com/dans-huang/PinPoint/issues/new?template=bug.yml)
+- [Share a device result](https://github.com/dans-huang/PinPoint/issues/new?template=device-compatibility.yml)
+- [Propose a feature](https://github.com/dans-huang/PinPoint/issues/new?template=feature-request.yml)
+
 ## Security, data, and licensing
 
 - Read [Security](docs/SECURITY.md) before entering credentials or exposing a

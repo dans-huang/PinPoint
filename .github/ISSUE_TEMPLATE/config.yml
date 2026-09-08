@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability privately
+    url: https://github.com/dans-huang/PinPoint/security/advisories/new
+    about: Do not disclose credentials, private recordings, or security issues in a public issue.

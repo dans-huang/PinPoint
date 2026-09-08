@@ -1,0 +1,66 @@
+name: Bug report
+description: Report reproducible PinPoint behavior that is not working as intended.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve PinPoint. Remove credentials, real transcripts, meeting details, device serial numbers, and other private information before submitting.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues for the same problem.
+          required: true
+        - label: I removed credentials and private recording data from this report.
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the visible behavior and its impact.
+      placeholder: PinPoint showed…
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How can we reproduce it?
+      description: Give the smallest reliable sequence of steps.
+      placeholder: |
+        1. Connect…
+        2. Record…
+        3. Select…
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include the PinPoint release or commit, macOS version, Mac model, Plaud model and firmware, and BLE or Fast Wi-Fi mode. Write “not applicable” where needed.
+      placeholder: |
+        PinPoint: v0.1.0
+        macOS / Mac:
+        Plaud model / firmware:
+        Transfer mode:
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Redacted evidence
+      description: Add concise logs or screenshots only after removing secrets and private meeting data.
+  - type: textarea
+    id: recovery
+    attributes:
+      label: Recovery
+      description: Explain whether retrying worked and confirm whether recordings remained intact.

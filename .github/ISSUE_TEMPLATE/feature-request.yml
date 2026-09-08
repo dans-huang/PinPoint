@@ -1,0 +1,53 @@
+name: Feature proposal
+description: Propose a focused improvement grounded in a user problem.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues for a similar proposal.
+          required: true
+        - label: This proposal does not include credentials or private recording content.
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: User problem
+      description: Describe the workflow or outcome that is difficult today, without starting from a preferred implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: What should become simpler, safer, or more reliable?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed approach
+      description: Optional. Explain the smallest design you think would solve the problem.
+  - type: textarea
+    id: tradeoffs
+    attributes:
+      label: Alternatives and tradeoffs
+  - type: dropdown
+    id: area
+    attributes:
+      label: Primary area
+      options:
+        - Recorder connection and transfer
+        - Plaud Cloud transcription and summaries
+        - Templates and Custom Words
+        - Codex or Claude handoff
+        - Multi-user hosted mode
+        - Interface and accessibility
+        - Setup and documentation
+        - Other
+    validations:
+      required: true

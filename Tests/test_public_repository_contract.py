@@ -193,6 +193,38 @@ class PublicRepositoryContractTests(unittest.TestCase):
         self.assertIn("scripts/build.sh --hosted --ios", mac)
         self.assertIn("unittest discover -s Tests", mac)
 
+    def test_contributor_entrypoints_preserve_project_safety_boundaries(self):
+        contributing = (ROOT / "docs/CONTRIBUTING.md").read_text(encoding="utf-8")
+        pull_request = (ROOT / ".github/pull_request_template.md").read_text(
+            encoding="utf-8"
+        )
+        normalized_contributing = " ".join(contributing.split())
+        normalized_pull_request = " ".join(pull_request.split())
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        issue_dir = ROOT / ".github/ISSUE_TEMPLATE"
+
+        for name in ("bug.yml", "device-compatibility.yml", "feature-request.yml"):
+            form = yaml.safe_load((issue_dir / name).read_text(encoding="utf-8"))
+            self.assertTrue(form["name"])
+            self.assertTrue(form["description"])
+            self.assertGreater(len(form["body"]), 0)
+
+        issue_config = yaml.safe_load(
+            (issue_dir / "config.yml").read_text(encoding="utf-8")
+        )
+        self.assertFalse(issue_config["blank_issues_enabled"])
+        self.assertIn("security/advisories/new", issue_config["contact_links"][0]["url"])
+
+        self.assertIn("docs/CONTRIBUTING.md", readme)
+        self.assertIn("maintainer-led", contributing)
+        self.assertIn("without a support or delivery SLA", readme)
+        self.assertIn("real transcripts", normalized_contributing)
+        self.assertIn("device serial numbers", normalized_contributing)
+        self.assertIn(
+            "Device, local, and Plaud Cloud recordings", normalized_pull_request
+        )
+        self.assertIn("Plaud SDK binaries", normalized_pull_request)
+
 
 if __name__ == "__main__":
     unittest.main()

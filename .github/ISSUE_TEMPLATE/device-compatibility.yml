@@ -1,0 +1,59 @@
+name: Device compatibility report
+description: Share a verified Plaud model, firmware, and transfer result.
+title: "[Device]: "
+labels:
+  - hardware
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Physical-device evidence helps PinPoint support more Plaud hardware. Do not include device serial numbers, credentials, transcripts, or private meeting details.
+  - type: dropdown
+    id: model
+    attributes:
+      label: Plaud model
+      options:
+        - NotePin S
+        - Note Pro
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: firmware
+    attributes:
+      label: Firmware version
+      placeholder: V1.2.7
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Mac environment
+      description: Include macOS version, Mac model, PinPoint release or commit, and Apple signing type.
+    validations:
+      required: true
+  - type: checkboxes
+    id: paths
+    attributes:
+      label: Paths physically tested
+      options:
+        - label: BLE transfer
+        - label: Fast Wi-Fi transfer
+        - label: Plaud Cloud upload
+        - label: Transcription and summary generation
+  - type: textarea
+    id: result
+    attributes:
+      label: Result
+      description: Explain what completed, what failed, and how you verified it.
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Data-safety confirmation
+      options:
+        - label: Device, local, and Plaud Cloud recordings remained intact.
+          required: true
+        - label: This report contains no credentials, serial numbers, or private recording content.
+          required: true
