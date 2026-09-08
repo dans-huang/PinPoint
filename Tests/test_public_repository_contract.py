@@ -191,6 +191,7 @@ class PublicRepositoryContractTests(unittest.TestCase):
         self.assertIn("PINPOINT_AUTH_MODE=hosted", ci)
         self.assertIn("scripts/build.sh --ios", mac)
         self.assertIn("scripts/build.sh --hosted --ios", mac)
+        self.assertIn("unittest discover -s Tests", mac)
 
 
 if __name__ == "__main__":

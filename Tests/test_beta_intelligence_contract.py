@@ -4,6 +4,7 @@
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 import textwrap
 import unittest
@@ -114,7 +115,10 @@ class BetaIntelligenceContractTests(unittest.TestCase):
             self.assertNotIn(forbidden, combined)
 
 
-@unittest.skipUnless(shutil.which("swiftc"), "Swift compiler is unavailable")
+@unittest.skipUnless(
+    sys.platform == "darwin" and shutil.which("swiftc"),
+    "The macOS Swift compiler is unavailable",
+)
 class BetaIntelligenceCoordinatorExecutableTests(unittest.TestCase):
     def test_lost_response_retry_and_restart_restore_are_idempotent(self):
         harness = textwrap.dedent(
