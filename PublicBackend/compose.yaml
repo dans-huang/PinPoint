@@ -1,0 +1,39 @@
+services:
+  pinpoint-backend:
+    build:
+      context: .
+    image: pinpoint-backend:local
+    init: true
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: true
+    ports:
+      # Keep the origin private. Terminate public TLS at a trusted reverse
+      # proxy that overwrites forwarding headers and targets this socket.
+      - "127.0.0.1:8787:8787"
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+    volumes:
+      - pinpoint-state:/var/lib/pinpoint
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    stop_grace_period: 20s
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import json,urllib.request; r=urllib.request.urlopen('http://127.0.0.1:8787/healthz', timeout=3); assert r.status == 200 and json.load(r) == {'status':'ok'}"
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+
+# Do not scale this service. SQLite ownership, invitation consumption, quotas,
+# and recorder claims require this one shared persistent volume and one replica.
+volumes:
+  pinpoint-state:

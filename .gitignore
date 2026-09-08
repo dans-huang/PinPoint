@@ -1,0 +1,32 @@
+.DS_Store
+
+# Plaud's official SDK is fetched by scripts/bootstrap-sdk.sh and is not
+# redistributed by this repository.
+/.vendor/
+
+# Generated Xcode files and local builds.
+/PinPoint.xcodeproj/
+/DerivedData*/
+/build/
+*.xcuserstate
+xcuserdata/
+
+# Machine-local signing and service configuration.
+/Config/PinPoint.local.xcconfig
+/Config/PinPointHosted.local.xcconfig
+/PublicBackend/.env
+.env
+
+# Python and test artifacts.
+**/__pycache__/
+*.py[cod]
+/.pytest_cache/
+/.venv/
+/PublicBackend/.venv/
+
+# Local backend state and logs.
+/PublicBackend/.data/
+*.sqlite3
+*.sqlite3-shm
+*.sqlite3-wal
+*.log

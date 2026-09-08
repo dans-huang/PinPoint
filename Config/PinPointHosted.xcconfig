@@ -1,0 +1,12 @@
+// Safe, non-secret defaults for an operator-hosted multi-user deployment.
+// Copy the example beside this file before building the hosted scheme.
+PINPOINT_BUNDLE_ID = org.pinpoint.community.hosted
+PINPOINT_DEVELOPMENT_TEAM =
+PINPOINT_DEPLOYMENT_MODE = hosted
+PINPOINT_API_BASE_URL = https:/$()/pinpoint.example.com
+PINPOINT_PLAUD_DOMAIN = platform-us.plaud.ai
+PINPOINT_INVITE_BASE_URL = https:/$()/pinpoint.example.com/invite
+PINPOINT_ASSOCIATED_DOMAIN = applinks:pinpoint.example.com
+PINPOINT_URL_SCHEME = pinpoint
+
+#include? "PinPointHosted.local.xcconfig"

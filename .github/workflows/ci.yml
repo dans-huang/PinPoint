@@ -1,0 +1,84 @@
+name: Tests and safety
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: Tests and repository safety
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: PublicBackend/requirements.txt
+      - name: Install test and backend dependencies
+        run: |
+          python -m pip install pyyaml
+          python -m pip install -r PublicBackend/requirements.txt
+      - name: Run unit tests
+        run: python -m unittest discover -s Tests -v
+      - name: Run Public Backend tests
+        run: python -m unittest discover -s PublicBackend/tests -v
+      - name: Build and smoke-test the Public Backend container
+        shell: bash
+        run: |
+          set -euo pipefail
+          image="pinpoint-backend:ci"
+          container="pinpoint-backend-ci"
+          volume="pinpoint-backend-ci-state"
+          cleanup() {
+            docker rm --force "$container" >/dev/null 2>&1 || true
+            docker volume rm "$volume" >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+          docker build --tag "$image" PublicBackend
+          docker volume create "$volume" >/dev/null
+          docker run --detach --name "$container" \
+            --read-only --tmpfs /tmp:rw,noexec,nosuid,size=16m \
+            --cap-drop ALL --security-opt no-new-privileges \
+            --publish 127.0.0.1:18787:8787 \
+            --volume "$volume:/var/lib/pinpoint" \
+            --env PINPOINT_AUTH_MODE=hosted \
+            --env PINPOINT_SESSION_SECRET=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa \
+            --env PINPOINT_USER_ID_SECRET_V1=bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb \
+            --env PINPOINT_APPLE_AUDIENCE=org.pinpoint.community.hosted \
+            --env PINPOINT_APPLE_TOKEN_CUSTODY_ENABLED=false \
+            --env PLAUD_CLIENT_ID=test-client \
+            --env PLAUD_CLIENT_SECRET=test-client-secret \
+            --env PLAUD_API_KEY=test-api-key \
+            "$image" >/dev/null
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:18787/healthz \
+              | python -c 'import json,sys; assert json.load(sys.stdin) == {"status": "ok"}'; then
+              exit 0
+            fi
+            sleep 1
+          done
+          docker logs "$container"
+          exit 1
+      - name: Reject whitespace errors
+        run: git diff --check
+      - name: Scan tracked files for high-confidence secrets
+        shell: bash
+        run: |
+          if git grep -nEI '(gh[pousr]_[A-Za-z0-9_]{30,}|sk_[A-Za-z0-9_-]{20,}|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----)' -- .; then
+            echo "A tracked file looks like it contains a credential." >&2
+            exit 1
+          fi

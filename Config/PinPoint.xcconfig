@@ -1,0 +1,13 @@
+// Safe, non-secret defaults for one-person self-hosting on this Mac.
+// Put signing overrides in PinPoint.local.xcconfig; that file is ignored.
+PINPOINT_BUNDLE_ID = org.pinpoint.community.app
+PINPOINT_DEVELOPMENT_TEAM =
+PINPOINT_CODE_SIGN_ENTITLEMENTS =
+PINPOINT_DEPLOYMENT_MODE = self_hosted
+PINPOINT_API_BASE_URL = http:/$()/127.0.0.1:8787
+PINPOINT_PLAUD_DOMAIN = platform-us.plaud.ai
+PINPOINT_INVITE_BASE_URL =
+PINPOINT_ASSOCIATED_DOMAIN =
+PINPOINT_URL_SCHEME = pinpoint
+
+#include? "PinPoint.local.xcconfig"

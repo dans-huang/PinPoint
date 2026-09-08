@@ -1,0 +1,8 @@
+// Copy to PinPoint.local.xcconfig. This file contains signing identity only;
+// Plaud and intelligence credentials always remain in PublicBackend/.env.
+PINPOINT_BUNDLE_ID = dev.example.pinpoint
+PINPOINT_DEVELOPMENT_TEAM =
+
+// Optional. A paid Apple Developer team with both Hotspot Configuration and
+// Access WiFi Information may enable Fast Wi-Fi transfer with this setting.
+// PINPOINT_CODE_SIGN_ENTITLEMENTS = App/PinPoint.entitlements

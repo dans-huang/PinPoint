@@ -1,0 +1,8 @@
+// Copy to PinPointHosted.local.xcconfig and replace every example value.
+// Hosted mode requires a paid Apple Developer membership, Sign in with Apple,
+// Associated Domains, and a stable HTTPS backend.
+PINPOINT_BUNDLE_ID = com.yourcompany.pinpoint
+PINPOINT_DEVELOPMENT_TEAM = YOUR_APPLE_TEAM_ID
+PINPOINT_API_BASE_URL = https:/$()/pinpoint.your-domain.example
+PINPOINT_INVITE_BASE_URL = https:/$()/pinpoint.your-domain.example/invite
+PINPOINT_ASSOCIATED_DOMAIN = applinks:pinpoint.your-domain.example

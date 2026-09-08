@@ -1,0 +1,96 @@
+name: PinPoint
+
+options:
+  bundleIdPrefix: org.pinpoint.community
+  projectFormat: Xcode 14.0
+  deploymentTarget:
+    iOS: "14.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    IPHONEOS_DEPLOYMENT_TARGET: "14.0"
+    CODE_SIGN_STYLE: Automatic
+    TARGETED_DEVICE_FAMILY: "1,2"
+    SUPPORTS_MACCATALYST: NO
+    SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: YES
+
+targetTemplates:
+  PinPointApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "14.0"
+    settings:
+      base:
+        PRODUCT_NAME: PinPoint
+        EXECUTABLE_NAME: PinPoint
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "0.1.0"
+        INFOPLIST_FILE: App/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        SWIFT_OBJC_BRIDGING_HEADER: App/PinPoint-Bridging-Header.h
+      configs:
+        Debug:
+          ENABLE_DEBUG_DYLIB: NO
+    sources:
+      - path: App
+        excludes:
+          - Info.plist
+      - path: Shared
+      - path: .vendor/plaud-sdk-public/sdk/ios/PlaudDeviceBasicSDK.bundle
+        buildPhase: resources
+    dependencies:
+      - framework: .vendor/plaud-sdk-public/sdk/ios/PlaudDeviceBasicSDK.framework
+        embed: true
+      - framework: .vendor/plaud-sdk-public/sdk/ios/PlaudBleSDK.framework
+        embed: true
+      - framework: .vendor/plaud-sdk-public/sdk/ios/PlaudWiFiSDK.framework
+        embed: true
+
+targets:
+  PinPoint:
+    templates:
+      - PinPointApp
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(PINPOINT_BUNDLE_ID)
+        PRODUCT_MODULE_NAME: PinPoint
+        DEVELOPMENT_TEAM: $(PINPOINT_DEVELOPMENT_TEAM)
+        CODE_SIGN_ENTITLEMENTS: $(PINPOINT_CODE_SIGN_ENTITLEMENTS)
+    configFiles:
+      Debug: Config/PinPoint.xcconfig
+      Release: Config/PinPoint.xcconfig
+
+  PinPointHosted:
+    templates:
+      - PinPointApp
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(PINPOINT_BUNDLE_ID)
+        PRODUCT_MODULE_NAME: PinPointHosted
+        DEVELOPMENT_TEAM: $(PINPOINT_DEVELOPMENT_TEAM)
+        CODE_SIGN_ENTITLEMENTS: App/PinPointHosted.entitlements
+    configFiles:
+      Debug: Config/PinPointHosted.xcconfig
+      Release: Config/PinPointHosted.xcconfig
+
+schemes:
+  PinPoint:
+    build:
+      targets:
+        PinPoint: all
+    run:
+      config: Debug
+    archive:
+      config: Release
+
+  PinPointHosted:
+    build:
+      targets:
+        PinPointHosted: all
+    run:
+      config: Debug
+    archive:
+      config: Release
